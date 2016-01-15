@@ -75,8 +75,8 @@ class APIEndpoint: NSObject, NSURLSessionTaskDelegate {
 				do {
 					if let json = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as? [[String: AnyObject]] {
 						// Parse, connect and return nodes from JSON data
-						let nodes = self.parseJSON(json)
-						self.connectNodes(nodes)
+						let nodes = APIEndpoint.parseJSON(json)
+						APIEndpoint.connectNodes(nodes)
 						completionHandler(nodes, response, error)
 					}
 				}
@@ -89,7 +89,7 @@ class APIEndpoint: NSObject, NSURLSessionTaskDelegate {
 	}
 	
 	// Parse JSON into nodes
-	private func parseJSON(json: [[String: AnyObject]]) -> [Node] {
+	private static func parseJSON(json: [[String: AnyObject]]) -> [Node] {
 		var nodes: [Node] = []
 		
 		for coordinate in json {
@@ -102,7 +102,7 @@ class APIEndpoint: NSObject, NSURLSessionTaskDelegate {
 	}
 	
 	// Connect nodes into a looping minimum spanning tree (greedy)
-	private func connectNodes(nodes: [Node]) {
+	private static func connectNodes(nodes: [Node]) {
 		var remaining = Array(nodes)
 		var previous: Node?
 		var current = remaining.first!
