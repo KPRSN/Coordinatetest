@@ -15,6 +15,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 	@IBOutlet weak var mapSegmentControl: UISegmentedControl!
 	@IBOutlet weak var mapView: MKMapView!
 	
+	// Design properties
+	let nodeRadius: Double = 8.0
+	let lineThickness: CGFloat = 1.5
+	
 	var endpoint = APIEndpoint()
 	var nodes: [Node] = []
 	var polygon: MKPolygon?
@@ -59,7 +63,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 	func addNodeCircles() {
 		// Create coordinates
 		for node in nodes {
-			let circle = MKCircle(centerCoordinate: node.coordinate, radius: 8.0)
+			let circle = MKCircle(centerCoordinate: node.coordinate, radius: nodeRadius)
 			nodeCircles.append(circle)
 			mapView.addOverlay(circle)
 		}
@@ -72,13 +76,14 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 		}
 	}
 
+	// Polygon/Node overlay renderers (delegate)
 	func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
 		if overlay is MKPolygon {
 			// Polygon renderer
 			let view = MKPolygonRenderer(overlay: overlay)
 			view.strokeColor = Colors.polygonStrokeColor
 			view.fillColor = Colors.polygonFillColor
-			view.lineWidth = 1.5
+			view.lineWidth = lineThickness
 			
 			return view
 		}
@@ -87,7 +92,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 			let view = MKCircleRenderer(overlay: overlay)
 			view.strokeColor = Colors.nodeStrokeColor
 			view.fillColor = Colors.nodeFillColor
-			view.lineWidth = 1.5
+			view.lineWidth = lineThickness
 			
 			return view
 		}
@@ -100,10 +105,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
 		// Dispose of any resources that can be recreated.
 	}
 	
+	// Zoom button
 	@IBAction func takeMeBack(sender: AnyObject) {
 		zoomToFit(true)
 	}
 	
+	// Map segment control
 	@IBAction func selectMapType(sender: AnyObject) {
 		switch mapSegmentControl.selectedSegmentIndex {
 		case 0:

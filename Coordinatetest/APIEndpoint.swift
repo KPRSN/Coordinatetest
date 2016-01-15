@@ -6,7 +6,7 @@
 //  Copyright © 2016 Karl Persson. All rights reserved.
 //
 //  Endpoint for connecting to the coordinate API, converting JSON data to tree of Nodes.
-//  Authenticating using credentials.
+//  Basic authentication using credentials.
 //
 //  Example data (JSON):
 //  [
@@ -51,7 +51,7 @@ class APIEndpoint: NSObject, NSURLSessionTaskDelegate {
 	
 	// Handle authentication
 	func URLSession(session: NSURLSession, task: NSURLSessionTask, didReceiveChallenge challenge: NSURLAuthenticationChallenge, completionHandler: (NSURLSessionAuthChallengeDisposition, NSURLCredential?) -> Void) {
-		// Try authenticating once
+		// Try authenticating once before cancelling
 		if challenge.previousFailureCount == 0 {
 			completionHandler(.UseCredential, NSURLCredential(user: user, password: password, persistence: .None))
 		}
@@ -110,10 +110,10 @@ class APIEndpoint: NSObject, NSURLSessionTaskDelegate {
 		while remaining.count > 0 {
 			remaining.removeAtIndex(remaining.indexOf(current)!)
 			
-			// Set previous
+			// Set previous node
 			current.previous = previous
 			
-			// Set next
+			// Set next node
 			if remaining.count > 0 {
 				var closest = remaining.first!
 				var closestDistance = current.distanceFromLocation(closest)

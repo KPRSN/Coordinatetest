@@ -14,7 +14,7 @@ struct Colors {
 	// Global tint color
 	static let tintColor = UIColor(red: 0.027, green: 0.133, blue: 0.18, alpha: 1)
 	
-	// MARK: Polygon/node colors
+	// Polygon/node colors
 	static let polygonFillColor = UIColor(red: 0.027, green: 0.133, blue: 0.18, alpha: 0.2)
 	static let polygonStrokeColor = tintColor
 	static let nodeFillColor = UIColor.whiteColor()
